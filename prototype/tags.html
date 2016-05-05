@@ -20,11 +20,31 @@
           separator: ','
         }, options);
 
-        $("<style type='text/css'> \
-            .ti-tag .ti-label { \
-              border: 1px solid black; \
-              border-left: none; \
-            } \
+        $("<style type='text/css'>\
+            .ti-tags {\
+              float: left;\
+              max-width: 100%;\
+              overflow: hidden;\
+              margin-top: -2px;\
+            }\
+            .ti-tag {\
+              background-color: #AED6F1;\
+              border-radius: 7px 3px 3px 7px;\
+              font-size: 80%;\
+              margin-right: 3px;\
+              font-family: Arial, sans-serif;\
+              cursor: default;\
+              float: left;\
+              padding: 2px;\
+            }\
+            .ti-close {\
+              cursor: pointer;\
+              margin: 2px;\
+              font-weight: bold;\
+            }\
+            .ti-label {\
+              padding-right: 2px;\
+            }\
           </style>").appendTo("head");
 
         var TaggableInput = function(input) {
@@ -37,7 +57,7 @@
         TaggableInput.prototype.wrapInput = function() {
           var css = this.$input.css(['border', 'color', 'background', 'padding', 'margin', 'height', 'width']);
 
-          var $newWrapper = $('<div class="taggable-wrapper"></div>');
+          var $newWrapper = $('<div class="ti-wrapper"></div>');
           this.$input.wrap($newWrapper);
           this.$wrapper = this.$input.parent();
           this.$wrapper.css(css);
@@ -53,7 +73,6 @@
 
           $('<div class="ti-tags"></div>').prependTo(this.$wrapper);
           this.$tagsContainer = this.$wrapper.find('.ti-tags');
-          this.$tagsContainer.css('float', 'left')
         };
         TaggableInput.prototype.registerEvents = function() {
           var that = this;
