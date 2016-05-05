@@ -20,6 +20,13 @@
           separator: ','
         }, options);
 
+        $("<style type='text/css'> \
+            .ti-tag .ti-label { \
+              border: 1px solid black; \
+              border-left: none; \
+            } \
+          </style>").appendTo("head");
+
         var TaggableInput = function(input) {
           this.$input = $(input);
           this.$wrapper = null;
@@ -28,9 +35,7 @@
           this.registerEvents();
         };
         TaggableInput.prototype.wrapInput = function() {
-          var css = this.$input.css(['border', 'color', 'background', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'margin', 'height', 'width']);
-          css['padding-top'] = (parseInt(css['padding-top']) - 2) + 'px';
-          css['padding-bottom'] = (parseInt(css['padding-bottom']) + 2) + 'px';
+          var css = this.$input.css(['border', 'color', 'background', 'padding', 'margin', 'height', 'width']);
 
           var $newWrapper = $('<div class="taggable-wrapper"></div>');
           this.$input.wrap($newWrapper);
@@ -42,20 +47,19 @@
             padding: '0px',
             margin: '0px',
             height: 'auto',
-            outline: 'none'
+            outline: 'none',
+            float: 'left'
           });
 
-          $('<div class="tags"></div>').prependTo(this.$wrapper);
-          this.$tagsContainer = this.$wrapper.find('.tags');
+          $('<div class="ti-tags"></div>').prependTo(this.$wrapper);
+          this.$tagsContainer = this.$wrapper.find('.ti-tags');
           this.$tagsContainer.css('float', 'left')
         };
         TaggableInput.prototype.registerEvents = function() {
           var that = this;
           this.$input.keypress(function(event) {
-            if(event.which == 13 && that.$input.val() != '') {
-              event.preventDefault();
-              that.contentToTag();
-            } else if(String.fromCharCode(event.which) == settings.separator) {
+            if((event.which == 13 && that.$input.val() != '') ||
+                (String.fromCharCode(event.which) == settings.separator)) {
               event.preventDefault();
               that.contentToTag();
             }
@@ -64,7 +68,9 @@
         TaggableInput.prototype.contentToTag = function() {
           var tagContent = this.$input.val();
           if (tagContent != '') {
-            console.log('Creating tag with "' + tagContent + '"')
+            var $tag = $('<span class="ti-tag"><span class="ti-close">&times;</span><span class="ti-label">' + tagContent + '</span></span>')
+            this.$tagsContainer.append($tag);
+            this.$input.width(this.$wrapper.width() - this.$tagsContainer.width() - 1);
           }
           this.$input.val('');
         };
