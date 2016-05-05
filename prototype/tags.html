@@ -17,22 +17,22 @@
     (function($) {
       $.fn.setTaggable = function(options) {
         var settings = $.extend({
-          color: "#556b2f",
-          backgroundColor: "white"
+          separator: ','
         }, options);
 
         var TaggableInput = function(input) {
           this.$input = $(input);
           this.$wrapper = null;
           this.wrapInput();
+          this.registerEvents();
         };
         TaggableInput.prototype.wrapInput = function() {
           var css = this.$input.css(['border', 'color', 'background', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'margin', 'height', 'width']);
           css['padding-top'] = (parseInt(css['padding-top']) - 2) + 'px';
           css['padding-bottom'] = (parseInt(css['padding-bottom']) + 2) + 'px';
 
-          var $new_wrapper = $('<div class="taggable-wrapper"></div>');
-          this.$input.wrap($new_wrapper);
+          var $newWrapper = $('<div class="taggable-wrapper"></div>');
+          this.$input.wrap($newWrapper);
           this.$wrapper = this.$input.parent();
           this.$wrapper.css(css);
           this.$input.css({
@@ -43,6 +43,25 @@
             height: 'auto',
             outline: 'none'
           });
+        };
+        TaggableInput.prototype.registerEvents = function() {
+          var that = this;
+          this.$input.keypress(function(event) {
+            if(event.which == 13 && that.$input.val() != '') {
+              event.preventDefault();
+              that.contentToTag();
+            } else if(String.fromCharCode(event.which) == settings.separator) {
+              event.preventDefault();
+              that.contentToTag();
+            }
+          });
+        };
+        TaggableInput.prototype.contentToTag = function() {
+          var tagContent = this.$input.val();
+          if (tagContent != '') {
+            console.log('Creating tag with "' + tagContent + '"')
+          }
+          this.$input.val('');
         };
 
         this.filter("input[type='text']").each(function() {
