@@ -23,6 +23,7 @@
         var TaggableInput = function(input) {
           this.$input = $(input);
           this.$wrapper = null;
+          this.$tagsContainer = null;
           this.wrapInput();
           this.registerEvents();
         };
@@ -43,6 +44,10 @@
             height: 'auto',
             outline: 'none'
           });
+
+          $('<div class="tags"></div>').prependTo(this.$wrapper);
+          this.$tagsContainer = this.$wrapper.find('.tags');
+          this.$tagsContainer.css('float', 'left')
         };
         TaggableInput.prototype.registerEvents = function() {
           var that = this;
@@ -65,7 +70,7 @@
         };
 
         this.filter("input[type='text']").each(function() {
-          new TaggableInput(this);
+          console.log(new TaggableInput(this));
         });
 
         return this;
