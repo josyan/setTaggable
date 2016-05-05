@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tags</title>
+  <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+  <style>
+    .taggable {
+      width: 400px;
+      border: 1px lightgray solid;
+      padding: 5px 4px 5px 4px;
+    }
+  </style>
+</head>
+<body>
+  <script type="text/javascript">
+    (function($) {
+      $.fn.setTaggable = function(options) {
+        var settings = $.extend({
+          color: "#556b2f",
+          backgroundColor: "white"
+        }, options);
+
+        var TaggableInput = function(input) {
+          this.$input = $(input);
+          this.$wrapper = null;
+          this.wrapInput();
+        };
+        TaggableInput.prototype.wrapInput = function() {
+          var css = this.$input.css(['border', 'color', 'background', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'margin', 'height', 'width']);
+          css['padding-top'] = (parseInt(css['padding-top']) - 2) + 'px';
+          css['padding-bottom'] = (parseInt(css['padding-bottom']) + 2) + 'px';
+
+          var $new_wrapper = $('<div class="taggable-wrapper"></div>');
+          this.$input.wrap($new_wrapper);
+          this.$wrapper = this.$input.parent();
+          this.$wrapper.css(css);
+          this.$input.css({
+            border: 'none',
+            width: this.$wrapper.css('width'),
+            padding: '0px',
+            margin: '0px',
+            height: 'auto',
+            outline: 'none'
+          });
+        };
+
+        this.filter("input[type='text']").each(function() {
+          new TaggableInput(this);
+        });
+
+        return this;
+      };
+    }(jQuery));
+
+    $(function() {
+      $('.taggable:first').setTaggable();
+    });
+  </script>
+
+  <input type="text" class="taggable" placeholder="Tags here"/>
+
+  <br/>
+
+  <input type="text" class="taggable" placeholder="Tags here"/>
+
+
+</body>
+</html>
